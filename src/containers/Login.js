@@ -36,7 +36,8 @@ export default class Login {
       })
 
   }
-
+  
+  //bug 1 : no functional test "employee-email/admin-email"
   handleSubmitAdmin = e => {
     e.preventDefault()
     const user = {

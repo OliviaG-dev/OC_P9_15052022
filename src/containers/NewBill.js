@@ -16,35 +16,44 @@ export default class NewBill {
     new Logout({ document, localStorage, onNavigate })
   }
 
+  //Bug 3 : bug bills extension jpg, jpeg ou png
   handleChangeFile = e => {
     e.preventDefault()
+    const targetFile = e.target.value 
+    //console.log(targetFile);
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
-    const filePath = e.target.value.split(/\\/g)
+    const filePath = targetFile.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-
-    this.store
-      .bills()
-      .create({
-        data: formData,
-        headers: {
-          noContentType: true
-        }
-      })
+    
+    // Ajout de la condition Si...
+    if (targetFile.includes('jpg') || targetFile.include('png') || targetFile.include('jpeg')){
+      this.store
+        .bills()
+        .create({
+          data: formData,
+          headers: {
+            noContentType: true
+          }
+        })
       .then(({fileUrl, key}) => {
-        console.log(fileUrl)
+        //console.log(fileUrl)
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
+    } else { // Sinon...
+      alert ("Le format du fichier n'est pas conforme, il faut qu'il soit .jpg, .png ou .jpeg")
+      targetFile = ""
+    }
   }
-  
+
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    //console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
