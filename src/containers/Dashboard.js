@@ -67,14 +67,16 @@ export const getStatus = (index) => {
   }
 }
 
+//bug 4 : Dashboard 
 export default class {
   constructor({ document, onNavigate, store, bills, localStorage }) {
     this.document = document
     this.onNavigate = onNavigate
     this.store = store
-    $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1))
-    $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2))
-    $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3))
+    this.allBills = bills //here
+    $('#arrow-icon1').click((e) => this.handleShowTickets(e, filteredBills(bills, getStatus(1)), 1)) //here
+    $('#arrow-icon2').click((e) => this.handleShowTickets(e, filteredBills(bills, getStatus(2)), 2)) //here
+    $('#arrow-icon3').click((e) => this.handleShowTickets(e, filteredBills(bills, getStatus(3)), 3)) //here
     new Logout({ localStorage, onNavigate })
   }
 
@@ -90,12 +92,11 @@ export default class {
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
       bills.forEach(b => {
-        $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
-      })
-      $(`#open-bill${bill.id}`).css({ background: '#2A2B35' })
-      $('.dashboard-right-container div').html(DashboardFormUI(bill))
-      $('.vertical-navbar').css({ height: '150vh' })
-      this.counter ++
+        $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })})
+        $(`#open-bill${bill.id}`).css({ background: '#2A2B35' })
+        $('.dashboard-right-container div').html(DashboardFormUI(bill))
+        $('.vertical-navbar').css({ height: '150vh' })
+        this.counter ++
     } else {
       $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' })
 
@@ -136,7 +137,7 @@ export default class {
     if (this.counter % 2 === 0) {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
-        .html(cards(filteredBills(bills, getStatus(this.index))))
+        .html(cards(bills)) // here
       this.counter ++
     } else {
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
@@ -146,7 +147,7 @@ export default class {
     }
 
     bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, this.allBills)) //here
     })
 
     return bills
