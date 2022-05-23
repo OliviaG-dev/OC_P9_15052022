@@ -19,8 +19,8 @@ export default class NewBill {
   //Bug 3 : bug bills extension jpg, jpeg ou png
   handleChangeFile = e => {
     e.preventDefault()
-    const targetFile = e.target.value 
-    //console.log(targetFile);
+    const targetFile = e.target.files[0].name 
+    console.log(targetFile);
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = targetFile.split(/\\/g)
     const fileName = filePath[filePath.length-1]
@@ -30,7 +30,7 @@ export default class NewBill {
     formData.append('email', email)
     
     // Ajout de la condition Si...
-    if (targetFile.includes('jpg') || targetFile.include('png') || targetFile.include('jpeg')){
+    if (targetFile.includes('jpg') || targetFile.includes('png') || targetFile.includes('jpeg')){
       this.store
         .bills()
         .create({
@@ -40,14 +40,13 @@ export default class NewBill {
           }
         })
       .then(({fileUrl, key}) => {
-        //console.log(fileUrl)
+        console.log(fileUrl)
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
     } else { // Sinon...
       alert ("Le format du fichier n'est pas conforme, il faut qu'il soit .jpg, .png ou .jpeg")
-      targetFile = ""
     }
   }
 
