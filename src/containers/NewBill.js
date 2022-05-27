@@ -40,13 +40,13 @@ export default class NewBill {
           }
         })
       .then(({fileUrl, key}) => {
-        console.log(fileUrl)
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName
       }).catch(error => console.error(error))
     } else { // Sinon...
       alert ("Le format du fichier n'est pas conforme, il faut qu'il soit .jpg, .png ou .jpeg")
+      e.target.value = null;
     }
   }
 
